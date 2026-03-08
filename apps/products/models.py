@@ -4,7 +4,7 @@ from apps.core.utils import resize_image
 
 class ProductCategory(models.Model):
     CATEGORY_CHOICES = [
-        ('masketnitsa', 'Masketnitsa'),
+        ('masketniy setka', 'Masketniy setka'),
         ('jalyuzi', 'Jalyuzi'),
         ('kabinka', 'Dushovoy Kabinka'),
     ]

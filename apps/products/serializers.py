@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.core.utils import resize_image, get_lang
+from apps.core.utils import  get_lang
 from .models import Product, ProductCategory
 
 
