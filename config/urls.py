@@ -35,7 +35,7 @@ urlpatterns = [
     path('api/v1/certificates/', include('apps.certificates.urls')),
     path('api/v1/gallery/', include('apps.gallery.urls')),
     path('api/v1/testimonials/', include('apps.testimonials.urls')),
-
+    path('api/v1/applications/', include('apps.applications.urls')),
 
     # Docs
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),

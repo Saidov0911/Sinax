@@ -6,7 +6,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env(
     DEBUG=(bool, True)
 )
-environ.Env.read_env(BASE_DIR / '.env')
+
+# Faqat .env fayl mavjud bo'lsa o'qi (lokal uchun)
+env_file = BASE_DIR / '.env'
+if env_file.exists():
+    environ.Env.read_env(env_file)
 
 SECRET_KEY = env('SECRET_KEY', default='django-insecure-3bc00!&(l!sbyv=5)e4$!=ta$z^vx@q(ci=$j65aje!=e63d5u')
 
@@ -74,8 +78,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': env('DB_NAME'),
+        'USER': env('DB_USER'),
+        'PASSWORD': env('DB_PASSWORD'),
+        'HOST': env('DB_HOST', default='localhost'),
+        'PORT': env('DB_PORT', default='5432'),
     }
 }
 
@@ -90,7 +98,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 # Internationalization
-LANGUAGE_CODE = 'uz-uz'
+LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'Asia/Tashkent'
 USE_I18N = True
 USE_TZ = True
@@ -139,7 +147,7 @@ CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
 
 
 # Telegram bot
-TELEGRAM_BOT_TOKEN = env('TELEGRAM_BOT_TOKEN', default='')
+BOT_TOKEN = env('BOT_TOKEN', default='')
 TELEGRAM_CHAT_ID = env('TELEGRAM_CHAT_ID', default='')
 
 
