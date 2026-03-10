@@ -1,5 +1,17 @@
 from django.db import models
 
+class AllowedUser(models.Model):
+    telegram_id = models.BigIntegerField(unique=True)
+    full_name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        verbose_name = 'Ruxsatli foydalanuvchi'
+        verbose_name_plural = 'Ruxsatli foydalanuvchilar'
+
+    def __str__(self):
+        return f"{self.full_name} ({self.telegram_id})"
+
 
 class Application(models.Model):
     class ServiceType(models.TextChoices):
@@ -28,3 +40,14 @@ class Application(models.Model):
 
     def __str__(self):
         return f"{self.name} — {self.get_service_type_display()}"
+
+
+class ApplicationMessage(models.Model):
+    application = models.ForeignKey(
+        Application, on_delete=models.CASCADE, related_name='messages'
+    )
+    chat_id = models.BigIntegerField()
+    message_id = models.BigIntegerField()
+
+    class Meta:
+        unique_together = ['application', 'chat_id']

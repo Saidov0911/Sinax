@@ -29,6 +29,13 @@ async def cmd_list(message: Message):
         parse_mode='HTML'
     )
 
+@router.message(Command("myid"))
+async def cmd_myid(message: Message):
+    await message.answer(
+        f"Sizning Telegram ID'ingiz: <code>{message.from_user.id}</code>",
+        parse_mode='HTML'
+    )
+
 
 @router.callback_query(F.data.startswith("list:"))
 async def show_list(callback: CallbackQuery):

@@ -148,7 +148,6 @@ CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
 
 # Telegram bot
 BOT_TOKEN = env('BOT_TOKEN', default='')
-TELEGRAM_CHAT_ID = env('TELEGRAM_CHAT_ID', default='')
-
+TELEGRAM_GROUP_ID = env('TELEGRAM_GROUP_ID', default='')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
