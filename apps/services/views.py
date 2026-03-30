@@ -5,8 +5,8 @@ from drf_spectacular.utils import extend_schema, OpenApiParameter
 from drf_spectacular.types import OpenApiTypes
 
 from apps.core.utils import get_lang
-from .models import Service
-from .serializers import ServiceSerializer
+from .models import Service, RepairPart
+from .serializers import ServiceSerializer, RepairPartSerializer
 
 CACHE_TTL = 60 * 15
 
@@ -47,3 +47,6 @@ class ServiceListView(ListAPIView):
         cache.set(cache_key, response.data, CACHE_TTL)
         return response
 
+class RepairPartListView(ListAPIView):
+    queryset = RepairPart.objects.filter(is_active=True)
+    serializer_class = RepairPartSerializer

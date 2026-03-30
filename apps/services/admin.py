@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.cache import cache
-from .models import Service
+from .models import Service, RepairPart
 
 
 def clear_service_cache(modeladmin, request, queryset):
@@ -30,3 +30,8 @@ class ServiceAdmin(admin.ModelAdmin):
             'fields': ('image', 'price', 'is_active', 'order')
         }),
     )
+
+@admin.register(RepairPart)
+class RepairPartAdmin(admin.ModelAdmin):
+    list_display = ['name_uz', 'price', 'is_active', 'order']
+    list_editable = ['is_active', 'order']
