@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.core.cache import cache
-from .models import Product, ProductCategory
+from .models import Product, ProductCategory, ProductImage
 
 
 def clear_product_cache(modeladmin, request, queryset):
@@ -60,3 +60,12 @@ class ProductAdmin(admin.ModelAdmin):
             'fields': ('category', 'price', 'image', 'is_active', 'order')
         }),
     )
+
+class ProductImageInline(admin.ModelAdmin):
+    model = ProductImage
+    extra = 5
+    max_num = 5
+
+@admin.register(ProductImage)
+class ProductImageAdmin(admin.ModelAdmin):
+    inlines = [ProductImageInline]

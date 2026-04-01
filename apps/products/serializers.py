@@ -1,6 +1,12 @@
 from rest_framework import serializers
-from apps.core.utils import  get_lang
-from .models import Product, ProductCategory
+from apps.core.utils import get_lang
+from .models import Product, ProductCategory, ProductImage
+
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductImage
+        fields = ['id', 'image', 'order']
 
 
 class ProductSerializer(serializers.ModelSerializer):
@@ -14,6 +20,30 @@ class ProductSerializer(serializers.ModelSerializer):
             'id', 'title', 'description',
             'price', 'price_label',
             'image', 'order', 'is_active',
+        ]
+
+    def get_title(self, obj):
+        return obj.get_title(get_lang(self.context.get('request')))
+
+    def get_description(self, obj):
+        return obj.get_description(get_lang(self.context.get('request')))
+
+    def get_price_label(self, obj):
+        return obj.get_price_label(get_lang(self.context.get('request')))
+
+
+class ProductDetailSerializer(serializers.ModelSerializer):
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    price_label = serializers.SerializerMethodField()
+    images = ProductImageSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Product
+        fields = [
+            'id', 'title', 'description',
+            'price', 'price_label',
+            'image', 'images', 'order', 'is_active',
         ]
 
     def get_title(self, obj):
