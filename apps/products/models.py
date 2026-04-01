@@ -128,19 +128,3 @@ class Product(models.Model):
             new_image = self.image.name
             if is_new or old_image != new_image:
                 resize_image(self.image.path, max_width=800, max_height=800, quality=85)
-
-class ProductImage(models.Model):
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, related_name='images'
-    )
-    image = models.ImageField(upload_to='products/gallery/')
-    order = models.PositiveIntegerField(default=0)
-
-    class Meta:
-        ordering = ['order']
-        verbose_name = 'Mahsulot rasmi'
-        verbose_name_plural = 'Mahsulot rasmlari'
-
-        def save(self, *args, **kwargs):
-            super().save(*args, **kwargs)
-            resize_image(self.image.path, 800, 800, quality=85)

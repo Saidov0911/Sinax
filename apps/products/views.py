@@ -7,7 +7,6 @@ from apps.core.utils import get_lang
 from .models import Product, ProductCategory
 from .serializers import (
     ProductSerializer,
-    ProductDetailSerializer,
     ProductCategoryListSerializer,
     ProductCategoryDetailSerializer,
 )
@@ -67,16 +66,16 @@ class ProductListView(ListAPIView):
 
 @extend_schema(
     tags=['Products'],
-    summary='Bitta mahsulot detali',
+    summary='Bitta mahsulot',
     parameters=[LANG_PARAMETER],
 )
 class ProductDetailView(RetrieveAPIView):
-    serializer_class = ProductDetailSerializer
+    serializer_class = ProductSerializer
 
     def get_queryset(self):
         return Product.objects.filter(
             is_active=True
-        ).select_related('category').prefetch_related('images')
+        ).select_related('category')
 
     def retrieve(self, request, *args, **kwargs):
         lang = get_lang(request)
