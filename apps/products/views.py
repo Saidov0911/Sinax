@@ -6,7 +6,7 @@ from drf_spectacular.types import OpenApiTypes
 from apps.core.utils import get_lang
 from .models import Product, ProductCategory
 from .serializers import (
-    ProductSerializer,
+    ProductDetailSerializer,
     ProductCategoryListSerializer,
     ProductCategoryDetailSerializer,
 )
@@ -39,7 +39,7 @@ CATEGORY_PARAMETER = OpenApiParameter(
     parameters=[LANG_PARAMETER, CATEGORY_PARAMETER],
 )
 class ProductListView(ListAPIView):
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
 
     def get_queryset(self):
         qs = Product.objects.filter(
@@ -70,7 +70,8 @@ class ProductListView(ListAPIView):
     parameters=[LANG_PARAMETER],
 )
 class ProductDetailView(RetrieveAPIView):
-    serializer_class = ProductSerializer
+    queryset = Product.objects.filter(is_active=True).prefetch_related('images')
+    serializer_class = ProductDetailSerializer
 
     def get_queryset(self):
         return Product.objects.filter(
@@ -149,7 +150,7 @@ class ProductCategoryDetailView(RetrieveAPIView):
     parameters=[LANG_PARAMETER],
 )
 class ProductListByCategoryView(ListAPIView):
-    serializer_class = ProductSerializer
+    serializer_class = ProductDetailSerializer
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
