@@ -1,0 +1,193 @@
+# Sinax — Masketniy Setka, Jalyuzi, Dushovoy Kabinka, Remont Okon
+
+Django REST Framework asosida qurilgan backend API va Telegram bot.
+
+---
+
+## Texnologiyalar
+
+- **Backend:** Django 5.2 + Django REST Framework
+- **Database:** PostgreSQL
+- **Cache:** Redis
+- **Bot:** Aiogram 3
+- **Container:** Docker + Docker Compose
+- **API Docs:** drf-spectacular (Swagger + Redoc)
+
+---
+
+## Loyiha strukturasi
+
+```
+Sinax/
+├── apps/
+│   ├── core/           # Umumiy utilitylar
+│   ├── products/       # Mahsulotlar va kategoriyalar
+│   ├── services/       # Xizmatlar (remont)
+│   ├── specialists/    # Mutaxassislar
+│   ├── partners/       # Hamkorlar
+│   ├── certificates/   # Sertifikatlar
+│   ├── gallery/        # Instagram gallery
+│   ├── testimonials/   # Mijozlar izohlari
+│   └── applications/   # Zayavkalar
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   ├── wsgi.py
+│   └── asgi.py
+├── Sinaxbot/           # Telegram bot
+│   ├── main.py
+│   ├── config.py
+│   ├── handlers/
+│   │   ├── application.py
+│   │   └── list.py
+│   └── keyboards/
+│       └── inline.py
+├── media/
+├── staticfiles/
+├── Dockerfile
+├── docker-compose.yml
+├── requirements.txt
+├── .env
+├── .env.docker
+└── manage.py
+```
+
+---
+
+## O'rnatish
+
+### 1. Reponi clone qiling
+
+```bash
+git clone <repo-url>
+cd Sinax
+```
+
+### 2. `.env.docker` faylini yarating
+
+```env
+SECRET_KEY=your-secret-key
+DEBUG=True
+ALLOWED_HOSTS=localhost,127.0.0.1
+
+DB_NAME=sinax_db
+DB_USER=sinax_user
+DB_PASSWORD=sinax_password
+DB_HOST=db
+DB_PORT=5432
+
+REDIS_URL=redis://redis:6379/1
+
+CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:5173
+
+TELEGRAM_BOT_TOKEN=your-bot-token
+TELEGRAM_CHAT_ID=your-chat-id
+```
+
+### 3. Docker orqali ishga tushirish
+
+```bash
+docker-compose up --build -d
+```
+
+### 4. Migrate va superuser
+
+```bash
+docker-compose exec web python manage.py migrate
+docker-compose exec web python manage.py createsuperuser
+```
+
+---
+
+## API Endpointlar
+
+| Method | URL | Tavsif |
+|--------|-----|--------|
+| GET | `/api/v1/products/` | Barcha mahsulotlar |
+| GET | `/api/v1/products/categories/` | Kategoriyalar |
+| GET | `/api/v1/products/categories/<slug>/` | Kategoriya detali |
+| GET | `/api/v1/products/masketnitsa/` | Masketniy setka mahsulotlari |
+| GET | `/api/v1/products/jalyuzi/` | Jalyuzi mahsulotlari |
+| GET | `/api/v1/products/kabinka/` | Dushovoy kabinka mahsulotlari |
+| GET | `/api/v1/services/` | Xizmatlar |
+| GET | `/api/v1/specialists/` | Mutaxassislar |
+| GET | `/api/v1/partners/` | Hamkorlar |
+| GET | `/api/v1/certificates/` | Sertifikatlar |
+| GET | `/api/v1/gallery/` | Gallery |
+| GET | `/api/v1/testimonials/` | Mijozlar izohlari |
+| POST | `/api/v1/applications/` | Zayavka yuborish |
+
+### Til parametri
+
+Barcha endpointlar `?lang=uz` parametrini qabul qiladi:
+
+```
+GET /api/v1/products/?lang=ru
+GET /api/v1/specialists/?lang=en
+```
+
+---
+
+## API Dokumentatsiya
+
+- **Swagger:** `http://localhost:8000/api/docs/`
+- **Redoc:** `http://localhost:8000/api/redoc/`
+
+---
+
+## Telegram Bot
+
+Bot zayavkalar uchun ishchi guruhga xabar yuboradi.
+
+### Bot holatlari
+
+```
+Yangi zayavka
+     ↓
+[📞 Men olaman]  ← birinchi bosgan ishchi oladi
+     ↓
+[✅ Tasdiqlandi]  [❌ Bekor qilindi]
+```
+
+### Bot komandalar
+
+- `/list` — zayavkalar ro'yxatini ko'rish
+  - 🆕 Gaplashilmaganlar
+  - ✅ Tasdiqlananlar
+  - ❌ Bekor qilinganlar
+
+### Guruhga ulash
+
+1. Botni guruhga qo'shing
+2. Guruhda `/start` yuboring
+3. `https://api.telegram.org/bot<TOKEN>/getUpdates` dan guruh chat id ni oling
+4. `.env.docker` da `TELEGRAM_CHAT_ID` ni yangilang
+
+---
+
+## Docker komandalar
+
+```bash
+# Ishga tushirish
+docker-compose up -d
+
+# To'xtatish
+docker-compose down
+
+# Loglar
+docker-compose logs web
+docker-compose logs bot
+
+# Restart
+docker-compose restart web
+docker-compose restart bot
+
+# Shell
+docker-compose exec web python manage.py shell
+```
+
+---
+
+## Admin panel
+
+`http://localhost:8000/admin/`
