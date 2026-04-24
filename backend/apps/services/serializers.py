@@ -15,10 +15,10 @@ class ServiceSerializer(serializers.ModelSerializer):
             'order', 'is_active',
         ]
 
-    def get_name(self, obj):
+    def get_name(self, obj) -> str:
         return obj.get_name(get_lang(self.context.get('request')))
 
-    def get_price_label(self, obj):
+    def get_price_label(self, obj) -> str:
         return obj.get_price_label(get_lang(self.context.get('request')))
 
 
@@ -30,8 +30,8 @@ class RepairPartSerializer(serializers.ModelSerializer):
         model = RepairPart
         fields = ['id', 'name', 'price', 'price_label']
 
-    def get_name(self, obj):
+    def get_name(self, obj) -> str:
         return obj.get_name(get_lang(self.context.get('request')))
 
-    def get_price_label(self, obj):
+    def get_price_label(self, obj) -> str:
         return obj.get_price_label(get_lang(self.context.get('request')))

@@ -10,5 +10,5 @@ class CertificateSerializer(serializers.ModelSerializer):
         model = Certificate
         fields = ['id', 'image', 'title', 'order']
 
-    def get_title(self, obj):
+    def get_title(self, obj) -> str:
         return obj.get_title(get_lang(self.context.get('request')))

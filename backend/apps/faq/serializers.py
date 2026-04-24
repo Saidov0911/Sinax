@@ -11,8 +11,8 @@ class FAQSerializer(serializers.ModelSerializer):
         model = FAQ
         fields = ['id', 'question', 'answer']
 
-    def get_question(self, obj):
+    def get_question(self, obj) -> str:
         return obj.get_question(get_lang(self.context.get('request')))
 
-    def get_answer(self, obj):
+    def get_answer(self, obj) -> str:
         return obj.get_answer(get_lang(self.context.get('request')))

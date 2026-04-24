@@ -14,5 +14,5 @@ class SpecialistSerializer(serializers.ModelSerializer):
             'order', 'is_active',
         ]
 
-    def get_position(self, obj):
+    def get_position(self, obj) -> str:
         return obj.get_position(get_lang(self.context.get('request')))

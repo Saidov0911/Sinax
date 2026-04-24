@@ -65,19 +65,16 @@ async def take_application(callback: CallbackQuery):
     conn = await get_db()
     try:
         app = await conn.fetchrow(
-            'SELECT * FROM applications_application WHERE id = $1', app_id
-        )
-
-        if app['status'] != 'new':
-            await callback.answer("Bu zayavkani allaqachon boshqasi olgan!", show_alert=True)
-            return
-
-        await conn.execute(
             '''UPDATE applications_application
                SET status = $1, taken_by = $2
-               WHERE id = $3''',
-            'in_progress', taker_name, app_id
+               WHERE id = $3 AND status = $4
+               RETURNING id, name, phone, service_type''',
+            'in_progress', taker_name, app_id, 'new'
         )
+
+        if app is None:
+            await callback.answer("Bu zayavkani allaqachon boshqasi olgan!", show_alert=True)
+            return
     finally:
         await conn.close()
 
@@ -109,6 +106,10 @@ async def confirm_application(callback: CallbackQuery):
         app = await conn.fetchrow(
             'SELECT * FROM applications_application WHERE id = $1', app_id
         )
+
+        if app is None:
+            await callback.answer("Zayavka topilmadi!", show_alert=True)
+            return
 
         # Faqat olgan ishchi tasdiqlashi mumkin
         if app['taken_by'] != callback.from_user.full_name:
@@ -151,6 +152,10 @@ async def cancel_application(callback: CallbackQuery):
         app = await conn.fetchrow(
             'SELECT * FROM applications_application WHERE id = $1', app_id
         )
+
+        if app is None:
+            await callback.answer("Zayavka topilmadi!", show_alert=True)
+            return
 
         # Faqat olgan ishchi bekor qilishi mumkin
         if app['taken_by'] != callback.from_user.full_name:

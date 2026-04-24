@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from apps.core.utils import  get_lang
+from apps.core.utils import get_lang
 from .models import Product, ProductCategory, ProductImage
 
 class ProductImageSerializer(serializers.ModelSerializer):
@@ -21,13 +21,13 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'image', 'images', 'order', 'is_active',
         ]
 
-    def get_title(self, obj):
+    def get_title(self, obj) -> str:
         return obj.get_title(get_lang(self.context.get('request')))
 
-    def get_description(self, obj):
+    def get_description(self, obj) -> str:
         return obj.get_description(get_lang(self.context.get('request')))
 
-    def get_price_label(self, obj):
+    def get_price_label(self, obj) -> str:
         return obj.get_price_label(get_lang(self.context.get('request')))
 
 
@@ -43,10 +43,10 @@ class ProductCategoryListSerializer(serializers.ModelSerializer):
             'hero_image', 'order', 'is_active',
         ]
 
-    def get_title(self, obj):
+    def get_title(self, obj) -> str:
         return obj.get_title(get_lang(self.context.get('request')))
 
-    def get_description(self, obj):
+    def get_description(self, obj) -> str:
         return obj.get_description(get_lang(self.context.get('request')))
 
 
@@ -66,14 +66,14 @@ class ProductCategoryDetailSerializer(serializers.ModelSerializer):
             'order', 'is_active', 'products',
         ]
 
-    def get_title(self, obj):
+    def get_title(self, obj) -> str:
         return obj.get_title(get_lang(self.context.get('request')))
 
-    def get_description(self, obj):
+    def get_description(self, obj) -> str:
         return obj.get_description(get_lang(self.context.get('request')))
 
-    def get_meta_title(self, obj):
+    def get_meta_title(self, obj) -> str:
         return obj.get_meta_title(get_lang(self.context.get('request')))
 
-    def get_meta_description(self, obj):
+    def get_meta_description(self, obj) -> str:
         return obj.get_meta_description(get_lang(self.context.get('request')))
